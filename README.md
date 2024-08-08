@@ -1,6 +1,9 @@
 # React + Vite
 
-API_URL= "https://api.themoviedb.org/3/movie/550?api_key=3c121458c8c65f0e1c4b0e1cc6b1b94a"
+API_URL = "https://api.themoviedb.org/3/movie/550?api_key=3c121458c8c65f0e1c4b0e1cc6b1b94a", https://api.themoviedb.org/3/discover/movie?
+API_IMG = "https://image.tmdb.org/t/p/w500/"
+API_SEARCH = ""
+
 
 Ссылка на vercel: 
 
