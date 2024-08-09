@@ -9,8 +9,16 @@ function Movie() {
   const getMovie = () => {
     fetch('https://api.themoviedb.org/3/movie/550?api_key=3c121458c8c65f0e1c4b0e1cc6b1b94a')
       .then((res) => res.json())
-      .then((json) => setMovie(json)) // Устанавливаем объект фильма
+      .then((json) => setMovie(json))
       .catch((error) => console.error('Error fetching the movie data:', error));
+  };
+
+  // const truncate = (s, n) => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
+  const truncate = (str, max = 40) => {
+    const array = str.trim().split(' ');
+    const ellipsis = array.length > max ? '...' : '';
+
+    return array.slice(0, max).join(' ') + ellipsis;
   };
 
   useEffect(() => {
@@ -32,9 +40,13 @@ function Movie() {
               alt={movie.title}
             />
 
-            <div className="title">{movie.original_title}</div>
+            <div className="">{movie.original_title}</div>
 
             <div className="">{`${format(new Date(movie.release_date), 'MMMM dd, yyyy', { locale: enGB })}`}</div>
+
+            <div className="">{movie.genres.map((genre) => genre.name)}</div>
+
+            <div className="">{truncate(movie.overview)}</div>
           </div>
         ))}
     </div>
