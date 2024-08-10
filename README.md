@@ -4,6 +4,11 @@ API_URL = "https://api.themoviedb.org/3/movie/550?api_key=3c121458c8c65f0e1c4b0e
 API_IMG = "https://image.tmdb.org/t/p/w500/"
 API_SEARCH = ""
 
+{/*{movie.poster_path ? (*/}
+{/*  <img className="movie-img" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />*/}
+{/*) : (*/}
+{/*  <div className="movie-img-placeholder" />*/}
+{/*)}*/}
 
 Ссылка на vercel: 
 
