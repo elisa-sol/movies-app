@@ -27,7 +27,7 @@ module.exports = {
       version: '18.2',
     },
   },
-  plugins: ['react-refresh', 'prettier'],
+  plugins: ['react-refresh', 'prettier', 'import'],
   rules: {
     'react/jsx-no-target-blank': 'off',
     'react-refresh/only-export-components': [
@@ -51,6 +51,14 @@ module.exports = {
         pathGroupsExcludedImportTypes: ['react'],
         'newlines-between': 'always',
         alphabetize: { order: 'asc', caseInsensitive: true },
+      },
+    ],
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: false,
+        optionalDependencies: false,
+        peerDependencies: false,
       },
     ],
   },

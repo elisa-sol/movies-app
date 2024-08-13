@@ -9,24 +9,28 @@ function Movie({ movies }) {
   const truncate = (str, max = 30) => {
     const array = str.trim().split(' ');
     const ellipsis = array.length > max ? '...' : '';
-
     return array.slice(0, max).join(' ') + ellipsis;
   };
 
-  const renderCount = 6;
-
   return (
     <div className="movie">
-      {movies.slice(0, renderCount).map((movie) => (
-        <div className="movie-card" key={movie.id}>
-          <img className="movie-img" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
-          <div className="movie-container">
-            <div className="movie-title">{movie.original_title}</div>
-            <div className="movie-date">{format(new Date(movie.release_date), 'MMMM dd, yyyy', { locale: enUS })}</div>
-            <div className="movie-truncate">{truncate(movie.overview)}</div>
+      {movies.map((movie) => {
+        const releaseDate = new Date(movie.release_date);
+        const formattedDate = Number.isNaN(releaseDate.getTime())
+          ? 'Unknown date'
+          : format(releaseDate, 'MMMM dd, yyyy', { locale: enUS });
+
+        return (
+          <div className="movie-card" key={movie.id}>
+            <img className="movie-img" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
+            <div className="movie-container">
+              <div className="movie-title">{movie.original_title}</div>
+              <div className="movie-date">{formattedDate}</div>
+              <div className="movie-truncate">{truncate(movie.overview)}</div>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -42,4 +46,5 @@ Movie.propTypes = {
     })
   ).isRequired,
 };
+
 export default Movie;
