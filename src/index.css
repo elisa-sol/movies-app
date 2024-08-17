@@ -70,3 +70,9 @@ body {
 .info a:hover {
   text-decoration: underline;
 }
+
+.tabs-container {
+  display: flex;
+  justify-content: center;
+  /*margin-top: 20px;*/
+}
