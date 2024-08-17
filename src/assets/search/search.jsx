@@ -5,8 +5,8 @@ import { Alert, Input } from 'antd';
 import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 
-function Search({ onSearch, query = '', noResults = false }) {
-  const [inputValue, setInputValue] = useState(query || '');
+function Search({ onSearch, query = 'return', noResults = false }) {
+  const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function Search({ onSearch, query = '', noResults = false }) {
         placeholder="Type to search..."
         ref={inputRef}
       />
-      {noResults && <Alert message="Ничего не найдено" type="info" className="nothing-found" />}
+      {noResults && <Alert message="По Вашему запросу ничего не найдено" type="info" className="nothing-found" />}
     </div>
   );
 }
