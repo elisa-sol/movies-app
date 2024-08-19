@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import './movie.css';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line import/order
 import { Rate } from 'antd';
 
 function Movie({ movies, onRate, ratedMovies }) {
@@ -50,8 +51,10 @@ function Movie({ movies, onRate, ratedMovies }) {
 
             <div className="movie-container">
               <div className="movie-title">{movie.original_title}</div>
+              {/* <div className="movie-genres">{movie.map((m) => {})}</div> */}
               <div className="movie-date">{formattedDate}</div>
               <div className="movie-truncate">{truncate(movie.overview)}</div>
+              <Rate count={10} style={{ display: 'block', marginTop: 'auto', fontSize: '15px' }} />
             </div>
             <Rate
               className="rate"
@@ -83,7 +86,9 @@ Movie.propTypes = {
       vote_average: PropTypes.number.isRequired,
     })
   ).isRequired,
+  // eslint-disable-next-line react/require-default-props
   onRate: PropTypes.func,
+  // eslint-disable-next-line react/forbid-prop-types,react/require-default-props
   ratedMovies: PropTypes.object,
 };
 
