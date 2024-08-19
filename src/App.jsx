@@ -24,7 +24,10 @@ function App() {
       try {
         const res = await fetch(`${URL}authentication/guest_session/new?api_key=${API_KEY}`);
         if (!res.ok) {
-          throw new Error(`Ошибка: ${res.statusText}`);
+          const errorText = `Ошибка: ${res.statusText}`;
+          setErrorMessage(errorText);
+          setLoading(false);
+          return;
         }
         const data = await res.json();
         setGuestSessionId(data.guest_session_id);
