@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { Rate } from 'antd';
 import { format } from 'date-fns';
@@ -6,8 +6,11 @@ import { enUS } from 'date-fns/locale';
 import './movie.css';
 import PropTypes from 'prop-types';
 
+import GenreContext from '../genres/genres';
+
 function Movie({ movies, onRate, ratedMovies }) {
   const [localRatedMovies, setLocalRatedMovies] = useState(ratedMovies || {});
+  const genres = useContext(GenreContext); // Используйте контекст для получения жанров
 
   useEffect(() => {
     setLocalRatedMovies(ratedMovies || {});
@@ -32,6 +35,15 @@ function Movie({ movies, onRate, ratedMovies }) {
     return '#66E900';
   };
 
+  const getGenreNames = (genreIds) => {
+    const genreMap = genres.reduce((acc, genre) => {
+      acc[genre.id] = genre.name;
+      return acc;
+    }, {});
+    // Возвращаем массив с названиями жанров
+    return Array.isArray(genreIds) ? genreIds.map((id) => genreMap[id] || 'Unknown') : [];
+  };
+
   return (
     <div className="movie">
       {movies.map((movie) => {
@@ -44,13 +56,25 @@ function Movie({ movies, onRate, ratedMovies }) {
         const ratingColor = getRatingColor(rating);
         const userRating = localRatedMovies[movie.id] || 0;
 
+        const genreNames = Array.isArray(movie.genre_ids) ? getGenreNames(movie.genre_ids) : [];
+
         return (
           <div className="movie-card" key={movie.id}>
             <img className="movie-img" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
 
             <div className="movie-container">
               <div className="movie-title">{movie.original_title}</div>
-              {/* <div className="movie-genres">{movie.map((m) => {})}</div> */}
+              <div className="movie-genres">
+                {genreNames.length > 0 ? (
+                  genreNames.map((genre, index) => (
+                    <span key={index} className="movie-genre">
+                      {genre}
+                    </span>
+                  ))
+                ) : (
+                  <span />
+                )}
+              </div>
               <div className="movie-date">{formattedDate}</div>
               <div className="movie-truncate">{truncate(movie.overview)}</div>
             </div>
@@ -82,13 +106,13 @@ Movie.propTypes = {
       poster_path: PropTypes.string,
       overview: PropTypes.string,
       vote_average: PropTypes.number.isRequired,
+      genre_ids: PropTypes.arrayOf(PropTypes.number).isRequired, // Добавьте genre_ids
     })
   ).isRequired,
   // eslint-disable-next-line react/require-default-props
   onRate: PropTypes.func,
   ratedMovies: PropTypes.shape({
-    movieId: PropTypes.number,
-    rating: PropTypes.number,
+    [PropTypes.number]: PropTypes.number,
   }).isRequired,
 };
 

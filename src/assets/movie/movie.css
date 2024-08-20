@@ -15,7 +15,7 @@
     'img title rating'
     'img text rating'
     'img stars stars';
-  gap: 10px;
+  gap: 5px;
   box-shadow: 0 4px 12px 0 #00000026;
   background: #ffffff;
   width: auto;
@@ -41,13 +41,35 @@
 }
 
 .movie-title {
-  padding-top: 10px;
+  padding-top: 5px;
   grid-area: title;
   font-family: Inter, sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   line-height: 28px;
   text-align: left;
+}
+
+.movie-genres {
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: text;
+  gap: 5px;
+}
+
+.movie-genre {
+  display: inline-block;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14.52px;
+  text-align: center;
+  color: #000000a6;
+  border: 1px solid #d9d9d9;
+  background: #fafafa;
+  padding: 0 2px;
+  border-radius: 2px;
+  box-sizing: border-box;
 }
 
 .movie-date {

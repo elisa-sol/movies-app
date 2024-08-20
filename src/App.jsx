@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Spin, Alert, Pagination, Tabs } from 'antd';
 
+import GenreContext from './assets/genres/genres';
 import Movie from './assets/movie/movie';
 import Search from './assets/search/search';
 
@@ -13,25 +14,20 @@ function App() {
   const [allMovies, setAllMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('return');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
   const [, setGuestSessionId] = useState(null);
   const [ratedMovies, setRatedMovies] = useState({});
+  const [currentRatedPage, setCurrentRatedPage] = useState(1);
+  const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    const createGuestSession = async () => {
+    const getGenres = async () => {
       try {
-        const res = await fetch(`${URL}authentication/guest_session/new?api_key=${API_KEY}`);
-        if (!res.ok) {
-          const errorText = `Ошибка: ${res.statusText}`;
-          setErrorMessage(errorText);
-          setLoading(false);
-          return;
-        }
-        const data = await res.json();
-        setGuestSessionId(data.guest_session_id);
-        localStorage.setItem('guestSessionId', data.guest_session_id);
+        const res = await fetch(`${URL}genre/movie/list?api_key=${API_KEY}`);
+        const json = await res.json();
+        setGenres(json.genres);
       } catch (error) {
         setErrorMessage(error.message);
       } finally {
@@ -39,6 +35,29 @@ function App() {
       }
     };
 
+    getGenres();
+  }, []);
+
+  const createGuestSession = async () => {
+    try {
+      const res = await fetch(`${URL}authentication/guest_session/new?api_key=${API_KEY}`);
+      if (!res.ok) {
+        const errorText = `Ошибка: ${res.statusText}`;
+        setErrorMessage(errorText);
+        setLoading(false);
+        return;
+      }
+      const data = await res.json();
+      setGuestSessionId(data.guest_session_id);
+      localStorage.setItem('guestSessionId', data.guest_session_id);
+    } catch (error) {
+      setErrorMessage(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     const storedSessionId = localStorage.getItem('guestSessionId');
     if (storedSessionId) {
       setGuestSessionId(storedSessionId);
@@ -73,6 +92,16 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const fetchInitialMovies = async () => {
+      if (searchQuery) {
+        await getMovies(searchQuery, currentPage);
+      }
+    };
+
+    fetchInitialMovies();
+  }, [searchQuery, currentPage]);
+
   const handleSearch = useCallback((query) => {
     setSearchQuery(query);
     setCurrentPage(1);
@@ -90,16 +119,25 @@ function App() {
     localStorage.setItem('ratedMovies', JSON.stringify(newRatedMovies));
   };
 
-  useEffect(() => {
-    const savedRatings = JSON.parse(localStorage.getItem('ratedMovies')) || {};
-    setRatedMovies(savedRatings);
-  }, [movies]);
-
   const handleSwitchPage = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const noResults = !loading && !errorMessage && movies.length === 0 && totalResults > 0;
+  const handleSwitchRatedPage = (pageNumber) => {
+    setCurrentRatedPage(pageNumber);
+  };
+
+  const ratedMoviesList = Object.keys(ratedMovies)
+    .map((id) => allMovies.find((movie) => movie.id === parseInt(id, 10)))
+    .filter((movie) => movie !== undefined);
+
+  const ratedMoviesPerPage = 20;
+  const startRatedIndex = (currentRatedPage - 1) * ratedMoviesPerPage;
+  const endRatedIndex = startRatedIndex + ratedMoviesPerPage;
+  const displayedRatedMovies = ratedMoviesList.slice(startRatedIndex, endRatedIndex);
+  const totalRatedResults = ratedMoviesList.length;
+
+  const noResults = !loading && !errorMessage && movies.length === 0 && totalResults === 0;
 
   if (loading) {
     return (
@@ -133,10 +171,6 @@ function App() {
     );
   }
 
-  const ratedMoviesList = Object.keys(ratedMovies)
-    .map((id) => allMovies.find((movie) => movie.id === parseInt(id, 10)))
-    .filter((movie) => movie !== undefined);
-
   const items = [
     {
       key: '1',
@@ -160,11 +194,13 @@ function App() {
       label: 'Rated',
       children: (
         <div>
-          <Movie movies={ratedMoviesList} ratedMovies={ratedMovies} />
+          <Movie movies={displayedRatedMovies} ratedMovies={ratedMovies} />
           <Pagination
-            pageSize={20}
+            current={currentRatedPage}
+            pageSize={ratedMoviesPerPage}
+            total={totalRatedResults}
+            onChange={handleSwitchRatedPage}
             style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
-            onChange={handleSwitchPage}
           />
         </div>
       ),
@@ -172,9 +208,11 @@ function App() {
   ];
 
   return (
-    <div>
-      <Tabs defaultActiveKey="1" centered items={items} />
-    </div>
+    <GenreContext.Provider value={genres}>
+      <div>
+        <Tabs defaultActiveKey="1" centered items={items} />
+      </div>
+    </GenreContext.Provider>
   );
 }
 
