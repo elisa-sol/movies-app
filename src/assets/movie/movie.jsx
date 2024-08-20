@@ -61,7 +61,7 @@ function Movie({ movies, onRate, ratedMovies }) {
           <div className="movie-card" key={movie.id}>
             <img
               className="movie-img"
-              src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : './noposter.png'}
+              src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : './noposter.jpg'}
               alt={movie.title}
             />
             <div className="movie-container">
