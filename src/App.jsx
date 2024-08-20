@@ -182,6 +182,7 @@ function App() {
           <Pagination
             current={currentPage}
             pageSize={20}
+            showSizeChanger={false}
             total={totalResults}
             onChange={handleSwitchPage}
             style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
@@ -197,6 +198,7 @@ function App() {
           <Movie movies={displayedRatedMovies} ratedMovies={ratedMovies} />
           <Pagination
             current={currentRatedPage}
+            showSizeChanger={false}
             pageSize={ratedMoviesPerPage}
             total={totalRatedResults}
             onChange={handleSwitchRatedPage}

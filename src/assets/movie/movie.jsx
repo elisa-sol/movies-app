@@ -10,7 +10,7 @@ import GenreContext from '../genres/genres';
 
 function Movie({ movies, onRate, ratedMovies }) {
   const [localRatedMovies, setLocalRatedMovies] = useState(ratedMovies || {});
-  const genres = useContext(GenreContext); // Используйте контекст для получения жанров
+  const genres = useContext(GenreContext);
 
   useEffect(() => {
     setLocalRatedMovies(ratedMovies || {});
