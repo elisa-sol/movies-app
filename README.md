@@ -1,16 +1,6 @@
 # React + Vite
 
-API_URL = "https://api.themoviedb.org/3/movie/550?api_key=3c121458c8c65f0e1c4b0e1cc6b1b94a", https://api.themoviedb.org/3/discover/movie?
-API_IMG = "https://image.tmdb.org/t/p/w500/"
-API_SEARCH = ""
-
-{/_{movie.poster_path ? (_/}
-{/_ <img className="movie-img" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />_/}
-{/_) : (_/}
-{/_ <div className="movie-img-placeholder" />_/}
-{/_)}_/}
-
-Ссылка на vercel:
+Ссылка на vercel: https://movies-app-delta-steel.vercel.app/
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
