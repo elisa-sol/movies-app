@@ -50,8 +50,7 @@ function Search({ onSearch, query = 'return', noResults = false }) {
 
 Search.propTypes = {
   onSearch: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/require-default-props
-  query: PropTypes.string,
+  query: PropTypes.string.isRequired,
   noResults: PropTypes.bool.isRequired,
 };
 

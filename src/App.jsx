@@ -158,7 +158,16 @@ function App() {
     {
       key: '2',
       label: 'Rated',
-      children: <Movie movies={ratedMoviesList} ratedMovies={ratedMovies} />,
+      children: (
+        <div>
+          <Movie movies={ratedMoviesList} ratedMovies={ratedMovies} />
+          <Pagination
+            pageSize={20}
+            style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+            onChange={handleSwitchPage}
+          />
+        </div>
+      ),
     },
   ];
 

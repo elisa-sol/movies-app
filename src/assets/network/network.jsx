@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import OnlineStatus from '../online/online';
 import OfflineStatus from '../offline/offline';
+import OnlineStatus from '../online/online';
 
-const NetworkStatusManager = () => {
+function NetworkStatusManager() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   const handleOnline = () => {
@@ -25,6 +25,6 @@ const NetworkStatusManager = () => {
   }, []);
 
   return <div>{isOnline ? <OnlineStatus /> : <OfflineStatus />}</div>;
-};
+}
 
 export default NetworkStatusManager;

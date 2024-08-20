@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+import { Rate } from 'antd';
 import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import './movie.css';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/order
-import { Rate } from 'antd';
 
 function Movie({ movies, onRate, ratedMovies }) {
   const [localRatedMovies, setLocalRatedMovies] = useState(ratedMovies || {});
@@ -20,7 +19,7 @@ function Movie({ movies, onRate, ratedMovies }) {
     if (onRate) onRate(movieId, value);
   };
 
-  const truncate = (str, max = 25) => {
+  const truncate = (str, max = 23) => {
     const array = str.trim().split(' ');
     const ellipsis = array.length > max ? '...' : '';
     return array.slice(0, max).join(' ') + ellipsis;
@@ -54,7 +53,6 @@ function Movie({ movies, onRate, ratedMovies }) {
               {/* <div className="movie-genres">{movie.map((m) => {})}</div> */}
               <div className="movie-date">{formattedDate}</div>
               <div className="movie-truncate">{truncate(movie.overview)}</div>
-              <Rate count={10} style={{ display: 'block', marginTop: 'auto', fontSize: '15px' }} />
             </div>
             <Rate
               className="rate"
@@ -88,8 +86,10 @@ Movie.propTypes = {
   ).isRequired,
   // eslint-disable-next-line react/require-default-props
   onRate: PropTypes.func,
-  // eslint-disable-next-line react/forbid-prop-types,react/require-default-props
-  ratedMovies: PropTypes.object,
+  ratedMovies: PropTypes.shape({
+    movieId: PropTypes.number,
+    rating: PropTypes.number,
+  }).isRequired,
 };
 
 export default Movie;
