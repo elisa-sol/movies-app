@@ -10,7 +10,6 @@ function OfflineStatus() {
         message="На данный момент Вы не подключены к Интернету. Проверьте подключение."
         size="large"
         tyle={{
-          // display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           marginTop: '40px',

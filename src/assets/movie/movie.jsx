@@ -40,7 +40,6 @@ function Movie({ movies, onRate, ratedMovies }) {
       acc[genre.id] = genre.name;
       return acc;
     }, {});
-    // Возвращаем массив с названиями жанров
     return Array.isArray(genreIds) ? genreIds.map((id) => genreMap[id] || 'Unknown') : [];
   };
 
@@ -76,10 +75,10 @@ function Movie({ movies, onRate, ratedMovies }) {
                 )}
               </div>
               <div className="movie-date">{formattedDate}</div>
-              <div className="movie-truncate">{truncate(movie.overview)}</div>
             </div>
+            <div className="movie-truncate">{truncate(movie.overview)}</div>
             <Rate
-              className="rate"
+              className="stars"
               allowHalf
               count={10}
               value={userRating}
