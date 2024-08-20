@@ -59,11 +59,19 @@ function Movie({ movies, onRate, ratedMovies }) {
 
         return (
           <div className="movie-card" key={movie.id}>
-            <img
-              className="movie-img"
-              src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : './noposter.jpg'}
-              alt={movie.title}
-            />
+            {movie.poster_path ? (
+              <img
+                className="movie-img"
+                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                alt={movie.title}
+              />
+            ) : (
+              <div className="no-poster">
+                No
+                <br /> Poster
+                <br /> Available
+              </div>
+            )}
             <div className="movie-container">
               <div className="movie-title">{movie.original_title}</div>
               <div className="movie-genres">
