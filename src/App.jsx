@@ -12,7 +12,8 @@ const API_KEY = '3c121458c8c65f0e1c4b0e1cc6b1b94a';
 function App() {
   const [movies, setMovies] = useState([]);
   const [allMovies, setAllMovies] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingMovies, setLoadingMovies] = useState(true);
+  const [, setLoadingGenres] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
   const [searchQuery, setSearchQuery] = useState('return');
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,7 +32,7 @@ function App() {
       } catch (error) {
         setErrorMessage(error.message);
       } finally {
-        setLoading(false);
+        setLoadingGenres(false);
       }
     };
 
@@ -44,7 +45,7 @@ function App() {
       if (!res.ok) {
         const errorText = `Ошибка: ${res.statusText}`;
         setErrorMessage(errorText);
-        setLoading(false);
+        setLoadingMovies(false);
         return;
       }
       const data = await res.json();
@@ -53,7 +54,7 @@ function App() {
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
-      setLoading(false);
+      setLoadingMovies(false);
     }
   };
 
@@ -61,7 +62,7 @@ function App() {
     const storedSessionId = localStorage.getItem('guestSessionId');
     if (storedSessionId) {
       setGuestSessionId(storedSessionId);
-      setLoading(false);
+      setLoadingMovies(false);
     } else {
       createGuestSession();
     }
@@ -73,7 +74,7 @@ function App() {
   }, []);
 
   const getMovies = async (query = 'return', pageNumber = 1) => {
-    setLoading(true);
+    setLoadingMovies(true);
     try {
       const res = await fetch(
         `${URL}search/movie?api_key=${API_KEY}&query=${query}&include_adult=false&language=en-US&page=${pageNumber}`
@@ -88,7 +89,7 @@ function App() {
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
-      setLoading(false);
+      setLoadingMovies(false);
     }
   };
 
@@ -137,23 +138,7 @@ function App() {
   const displayedRatedMovies = ratedMoviesList.slice(startRatedIndex, endRatedIndex);
   const totalRatedResults = ratedMoviesList.length;
 
-  const noResults = !loading && !errorMessage && movies.length === 0 && totalResults === 0;
-
-  if (loading) {
-    return (
-      <div>
-        <Spin
-          size="large"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: '40px',
-          }}
-        />
-      </div>
-    );
-  }
+  const noResults = !loadingMovies && !errorMessage && movies.length === 0 && totalResults === 0;
 
   if (errorMessage) {
     return (
@@ -178,15 +163,24 @@ function App() {
       children: (
         <>
           <Search onSearch={handleSearch} query={searchQuery} noResults={noResults} />
-          <Movie movies={movies} onRate={updateRatedMovies} ratedMovies={ratedMovies} />
-          <Pagination
-            current={currentPage}
-            pageSize={20}
-            showSizeChanger={false}
-            total={totalResults}
-            onChange={handleSwitchPage}
-            style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
-          />
+          {loadingMovies ? (
+            <Spin
+              size="large"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '40px' }}
+            />
+          ) : (
+            <>
+              <Movie movies={movies} onRate={updateRatedMovies} ratedMovies={ratedMovies} />
+              <Pagination
+                current={currentPage}
+                pageSize={20}
+                showSizeChanger={false}
+                total={totalResults}
+                onChange={handleSwitchPage}
+                style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+              />
+            </>
+          )}
         </>
       ),
     },
@@ -195,15 +189,24 @@ function App() {
       label: 'Rated',
       children: (
         <div>
-          <Movie movies={displayedRatedMovies} ratedMovies={ratedMovies} />
-          <Pagination
-            current={currentRatedPage}
-            showSizeChanger={false}
-            pageSize={ratedMoviesPerPage}
-            total={totalRatedResults}
-            onChange={handleSwitchRatedPage}
-            style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
-          />
+          {loadingMovies ? (
+            <Spin
+              size="large"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '40px' }}
+            />
+          ) : (
+            <>
+              <Movie movies={displayedRatedMovies} ratedMovies={ratedMovies} />
+              <Pagination
+                current={currentRatedPage}
+                showSizeChanger={false}
+                pageSize={ratedMoviesPerPage}
+                total={totalRatedResults}
+                onChange={handleSwitchRatedPage}
+                style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}
+              />
+            </>
+          )}
         </div>
       ),
     },
@@ -211,9 +214,7 @@ function App() {
 
   return (
     <GenreContext.Provider value={genres}>
-      <div>
-        <Tabs defaultActiveKey="1" centered items={items} />
-      </div>
+      <Tabs defaultActiveKey="1" centered items={items} />
     </GenreContext.Provider>
   );
 }

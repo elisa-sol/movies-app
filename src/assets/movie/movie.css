@@ -180,6 +180,7 @@
     font-weight: 400;
     line-height: 28px;
     text-align: left;
+    margin-left: 5px;
   }
 
   .movie-genres {
@@ -187,6 +188,7 @@
     flex-wrap: wrap;
     grid-area: text;
     gap: 5px;
+    margin-left: 5px;
   }
 
   .movie-date {
@@ -197,6 +199,7 @@
     line-height: 22px;
     text-align: left;
     color: #827e7e;
+    margin-left: 5px;
   }
 
   .movie-truncate {
@@ -206,11 +209,13 @@
     font-weight: 400;
     line-height: 22px;
     text-align: left;
+    margin-left: 5px;
   }
 
   .stars {
     display: grid;
     grid-area: stars;
     margin-bottom: 5px;
+    margin-left: 5px;
   }
 }
